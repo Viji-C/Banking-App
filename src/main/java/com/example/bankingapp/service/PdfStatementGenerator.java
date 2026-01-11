@@ -113,10 +113,6 @@ public class PdfStatementGenerator
 
   public String generateAndSendStatement(StatementEmailRequest statementEmailRequest)
   {
-    String accountNumber = statementEmailRequest.getAccountNumber();
-    String startDate = statementEmailRequest.getStartDate();
-    String endDate = statementEmailRequest.getEndDate();
-    List<Transaction> transactions = bankStatementService.generateStatement(accountNumber, startDate, endDate);
 
     byte[] pdfBytes = generateStatementPdf(statementEmailRequest);
 

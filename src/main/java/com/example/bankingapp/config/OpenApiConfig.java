@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Locale;
-
 @Configuration
 @OpenAPIDefinition(
     info = @Info(

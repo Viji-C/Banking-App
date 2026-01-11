@@ -29,11 +29,13 @@ public class User
   private String accountNumber;
   private BigDecimal accountBalance;
   private String email;
+  private String password;
   private String phoneNumber;
   private String alternativePhoneNumber;
-  private String status;
+  private boolean active;
   @CreationTimestamp
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime modifiedAt;
+  private Role role;
 }

@@ -1,10 +1,6 @@
 package com.example.bankingapp.controller;
 
-import com.example.bankingapp.dto.EmailDetails;
 import com.example.bankingapp.dto.StatementEmailRequest;
-import com.example.bankingapp.entity.Transaction;
-import com.example.bankingapp.service.BankStatementService;
-import com.example.bankingapp.service.EmailService;
 import com.example.bankingapp.service.PdfStatementGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,11 +21,7 @@ public class BankStatementController
 {
 
   @Autowired
-  private BankStatementService statementService;
-  @Autowired
   private PdfStatementGenerator pdfGenerator;
-  @Autowired
-  private EmailService emailService;
 
   @Operation(
       summary = "Download bank statement as PDF",

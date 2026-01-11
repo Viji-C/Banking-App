@@ -1,10 +1,16 @@
 package com.example.bankingapp.service;
 
+import com.example.bankingapp.config.JwtTokenProvider;
 import com.example.bankingapp.dto.*;
+import com.example.bankingapp.entity.Role;
 import com.example.bankingapp.entity.User;
 import com.example.bankingapp.repository.UserRepository;
 import com.example.bankingapp.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,7 +28,16 @@ public class UserService
   EmailService emailService;
 
   @Autowired
+  PasswordEncoder passwordEncoder;
+
+  @Autowired
   TransactionService transactionService;
+
+  @Autowired
+  AuthenticationManager authenticationManager;
+
+  @Autowired
+  JwtTokenProvider jwtTokenProvider;
 
   public BankResponse createAccount(AccountCreationDto userRequest) {
 
@@ -47,9 +62,11 @@ public class UserService
         .accountNumber(AccountUtils.generateAccountNumber())
         .accountBalance(BigDecimal.ZERO)
         .email(userRequest.getEmail())
+        .password(passwordEncoder.encode(userRequest.getPassword()))
         .phoneNumber(userRequest.getPhoneNumber())
         .alternativePhoneNumber(userRequest.getAlternativePhoneNumber())
-        .status("ACTIVE")
+        .active(true)
+        .role(Role.ROLE_ADMIN)
         .build();
 
     User savedUser = userRepository.save(newUser);
@@ -73,6 +90,24 @@ public class UserService
         .build();
   }
 
+  public BankResponse login(LoginDto loginDto){
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
+    );
+
+    EmailDetails loginAlert = EmailDetails.builder()
+            .subject("You're logged in!")
+            .recipient(loginDto.getEmail())
+            .messageBody("You are logged in your account. If you, If you didn't initiate your request, please contact your bank")
+            .build();
+
+    emailService.sendEmailAlert(loginAlert);
+
+    return BankResponse.builder()
+            .responseCode("Login Success")
+            .responseMessage(jwtTokenProvider.generateToken(authentication))
+            .build();
+  }
   public CustomResponse fetchAllUsers(){
     List<User> userList = userRepository.findAll();
     List<UserDto> userDtos = userList.stream().map(AccountUtils::mapUserToUserDto).toList();

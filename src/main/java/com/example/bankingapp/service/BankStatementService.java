@@ -21,9 +21,6 @@ public class BankStatementService
   @Autowired
   TransactionRepository transactionRepository;
 
-  @Autowired
-  private EmailService emailService;
-
   public List<Transaction> generateStatement(String accountNumber, String startDate, String endDate)
   {
 

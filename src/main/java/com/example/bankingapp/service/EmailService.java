@@ -9,6 +9,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +21,7 @@ public class EmailService
   @Value("${spring.mail.username}")
   private String senderEmail;
 
+  @Async
   public void sendEmailAlert(EmailDetails emailDetails) {
     try {
       SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -35,6 +37,7 @@ public class EmailService
     }
   }
 
+  @Async
   public void sendEmailWithAttachment(EmailDetails details) {
 
     try {

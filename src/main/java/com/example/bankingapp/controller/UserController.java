@@ -46,6 +46,11 @@ public class UserController
     return userService.createAccount(userRequest);
   }
 
+  @PostMapping("/login")
+  public BankResponse login(@RequestBody LoginDto loginDto){
+      return userService.login(loginDto);
+  }
+
   @Operation(
       summary = "Fetch all users",
       description = "Returns a list of all registered users."
@@ -91,7 +96,7 @@ public class UserController
           description = "Internal server error"
       )
   })
-  @PutMapping("{id}")
+  @PutMapping("/{id}")
   public CustomResponse updateUser(@RequestBody AccountCreationDto accountCreationDto, @PathVariable Long id){
     return userService.updateUser(accountCreationDto, id);
   }
@@ -105,7 +110,7 @@ public class UserController
       @ApiResponse(responseCode = "404", description = "User not found"),
       @ApiResponse(responseCode = "500", description = "Internal server error")
   })
-  @DeleteMapping("{id}")
+  @DeleteMapping("/{id}")
   public CustomResponse deleteUser(@PathVariable Long id){
     return userService.deleteUser(id);
   }
@@ -175,7 +180,7 @@ public class UserController
           )
       )
   })
-  @GetMapping("balanceEnquiry")
+  @GetMapping("/balanceEnquiry")
   public BankResponse balanceEnquiry(
       @Parameter(
           description = "Account number to check balance for",
@@ -216,7 +221,7 @@ public class UserController
           )
       )
   })
-  @PostMapping("credit")
+  @PostMapping("/credit")
   public BankResponse deposit(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
           description = "Details of the credit transaction",
@@ -259,7 +264,7 @@ public class UserController
           )
       )
   })
-  @PostMapping("debit")
+  @PostMapping("/debit")
   public BankResponse debit(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
           description = "Details of the debit transaction",
@@ -304,7 +309,7 @@ public class UserController
           )
       )
   })
-  @PostMapping("transfer")
+  @PostMapping("/transfer")
   public BankResponse transfer(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
           description = "Transfer request details",
